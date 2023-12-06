@@ -1,45 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:bus_eka/screens/drawer.dart';
-import 'package:bus_eka/screens/passenger/sharelocation.dart';
-import 'package:bus_eka/screens/map_part/map_or_timetable.dart';
-import 'package:bus_eka/services/auth_logic.dart';
+import 'package:bus_eka/screens/admin/bus/bus_home.dart';
+import 'package:bus_eka/screens/admin/passenger/passenger_home.dart';
+import 'package:bus_eka/screens/admin/route/route_home.dart';
 import 'package:bus_eka/utils/colors.dart';
 import 'package:bus_eka/widgets/bluebutton.dart';
 import 'package:bus_eka/widgets/greenbutton.dart';
 import 'package:bus_eka/widgets/yellowbutton.dart';
-import '../../models/user.dart' as user_model;
 
-class ShareLocatioOrBookTicket extends StatefulWidget {
-  const ShareLocatioOrBookTicket({Key? key}) : super(key: key);
+class AdminOption extends StatefulWidget {
+  const AdminOption({Key? key}) : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
-  _ShareLocatioOrBookTicketState createState() =>
-      _ShareLocatioOrBookTicketState();
+  _AdminOptionState createState() => _AdminOptionState();
 }
 
-class _ShareLocatioOrBookTicketState extends State<ShareLocatioOrBookTicket> {
-  final AuthMethodes _authMethodes = AuthMethodes();
-
-  user_model.User? currentUser;
-
+class _AdminOptionState extends State<AdminOption> {
   @override
   void initState() {
     super.initState();
-    _loadCurrentUser();
-  }
-
-  // Load the current user details
-  void _loadCurrentUser() async {
-    try {
-      user_model.User? user = await _authMethodes.getCurrentUser();
-      setState(() {
-        currentUser = user;
-      });
-    } catch (e) {
-      print("Error loading current user: $e");
-      // Handle the error as needed
-    }
   }
 
   @override
@@ -49,10 +28,6 @@ class _ShareLocatioOrBookTicketState extends State<ShareLocatioOrBookTicket> {
       appBar: AppBar(
         backgroundColor: mainBlueColor,
         elevation: 0.0,
-      ),
-      drawer: AppDrawer(
-        onSignOut: _signOut, // Pass the sign-out callback
-        userName: currentUser?.userName, // Pass the current user's name
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -66,10 +41,10 @@ class _ShareLocatioOrBookTicketState extends State<ShareLocatioOrBookTicket> {
                 Container(
                   height: MediaQuery.of(context).size.height * 0.02,
                 ),
-                Text(
-                  'Hay, ${currentUser?.userName ?? "Loading"}',
+                const Text(
+                  'Hay, Admin',
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.yellow,
                     fontSize: 20, // Set the font size to 20
                     fontFamily:
@@ -79,7 +54,7 @@ class _ShareLocatioOrBookTicketState extends State<ShareLocatioOrBookTicket> {
 
                 const SizedBox(height: 5),
                 const Text(
-                  'Whare You want to GO',
+                  'What You want to DO',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.yellow,
@@ -106,54 +81,39 @@ class _ShareLocatioOrBookTicketState extends State<ShareLocatioOrBookTicket> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       GreenButton(
-                        text: 'Bus Info',
+                        text: 'BUS',
                         onPressed: () {
+                          // Add your logic for button 2 here
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
-                              builder: (context) => const MapOrTimeTable(),
-                            ),
+                            MaterialPageRoute(builder: (context) => BusCrud()),
                           );
-                          // Add your logic for button 1 here
                         },
                       ),
                       const SizedBox(height: 30),
                       YellowButton(
-                        text: 'Bus Booking',
+                        text: 'Route',
                         onPressed: () {
                           // Add your logic for button 2 here
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => RouteCrud()),
+                          );
                         },
                       ),
-                      const SizedBox(height: 50),
-                      const Text(
-                        'OR',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: mainBlueColor,
-                          fontSize: 20,
-                          fontFamily: 'RobotoMono',
-                        ),
-                      ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 30),
                       BlueBtn(
-                        text: 'Share Your Location',
+                        text: 'Passenger',
                         onPressed: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const ShareLocation(),
-                            ),
+                                builder: (context) => PassengerCrud()),
                           );
                         },
                       ),
                       const SizedBox(height: 5),
-                      GestureDetector(
-                        onTap: () {},
-                        child: Image.asset(
-                          'assets/locationicon.png',
-                          height: 80,
-                        ),
-                      ),
                     ],
                   ),
                 ),
@@ -163,21 +123,5 @@ class _ShareLocatioOrBookTicketState extends State<ShareLocatioOrBookTicket> {
         ),
       ),
     );
-  }
-
-  // Sign out method
-  void _signOut() async {
-    try {
-      await _authMethodes.signOut();
-
-      // Update the currentUser state after signing out
-      setState(() {
-        currentUser = null;
-      });
-
-      Navigator.pop(context); // Close the current screen after sign-out
-    } catch (err) {
-      print(err.toString());
-    }
   }
 }

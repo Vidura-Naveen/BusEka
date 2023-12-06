@@ -1,1 +1,0 @@
-const webSecreenSize = 600;

@@ -1,9 +1,11 @@
-import 'package:bus_eka/screens/track_anonymous/maportimetable.dart';
+import 'package:flutter/material.dart';
+// import 'package:bus_eka/screens/passenger/sharelocationorbook.dart';
+// import 'package:bus_eka/screens/register_screen.dart';
+import 'package:bus_eka/screens/map_part/map_or_timetable.dart';
+import 'package:bus_eka/widgets/bluebutton.dart';
 import 'package:bus_eka/services/auth_logic.dart';
 import 'package:bus_eka/utils/colors.dart';
-import 'package:bus_eka/widgets/bluebutton.dart';
 import 'package:bus_eka/wrapper.dart';
-import 'package:flutter/material.dart';
 import '../../models/user.dart' as user_model;
 
 class Home extends StatefulWidget {
@@ -28,7 +30,7 @@ class _HomeState extends State<Home> {
   // Load the current user details
   void _loadCurrentUser() async {
     try {
-      user_model.User user = await _authMethodes.getCurrentUser();
+      user_model.User? user = await _authMethodes.getCurrentUser();
       setState(() {
         currentUser = user;
       });

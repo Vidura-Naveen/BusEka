@@ -2,19 +2,17 @@ class User {
   final String uid;
   final String email;
   final String userName;
-  final String nic;
-  final List loyaltycount;
+  final String phoneno;
+  final int loyaltycount;
   final String usercredential;
-  final String mobilenum;
 
   User({
     required this.uid,
     required this.email,
     required this.userName,
-    required this.nic,
+    required this.phoneno,
     required this.loyaltycount,
     required this.usercredential,
-    required this.mobilenum,
   });
 
   //this methode will convert the user data to json object
@@ -23,10 +21,9 @@ class User {
       'uid': uid,
       'email': email,
       'userName': userName,
-      'nic': nic,
+      'phoneno': phoneno,
       'loyaltycount': loyaltycount,
       'usercredential': usercredential,
-      'mobilenum': mobilenum,
     };
   }
 
@@ -39,10 +36,9 @@ class User {
       uid: json['uid'],
       email: json['email'],
       userName: json['userName'],
-      nic: json['nic'],
+      phoneno: json['phoneno'],
       loyaltycount: json['loyaltycount'],
       usercredential: json['usercredential'],
-      mobilenum: json['mobilenum'],
     );
   }
 }

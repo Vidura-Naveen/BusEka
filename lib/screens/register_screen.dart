@@ -1,10 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:bus_eka/screens/home.dart';
 import 'package:bus_eka/screens/login_screen.dart';
 import 'package:bus_eka/services/auth_logic.dart';
 import 'package:bus_eka/utils/util_functions.dart';
-import 'package:bus_eka/widgets/text_feild.dart';
 import 'package:bus_eka/widgets/yellowbutton.dart';
-import 'package:flutter/material.dart';
+import 'package:bus_eka/widgets/text_feild.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -16,9 +16,8 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _nicController = TextEditingController();
+  final TextEditingController _phonenoController = TextEditingController();
   final TextEditingController _userNameController = TextEditingController();
-  final TextEditingController _mobilenumController = TextEditingController();
 
   bool isLoading = false;
 
@@ -33,17 +32,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
     // get the user data from the text fields
     String email = _emailController.text.trim();
     String password = _passwordController.text.trim();
-    String nic = _nicController.text.trim();
+    String phoneno = _phonenoController.text.trim();
     String userName = _userNameController.text.trim();
-    String mobilenum = _mobilenumController.text.trim();
 
     // register the user
     String result = await _authMethodes.registerWithEmailAndPassword(
       email: email,
       password: password,
       userName: userName,
-      nic: nic,
-      mobilenum: mobilenum,
+      phoneno: phoneno,
     );
 
     if (result != 'success') {
@@ -70,9 +67,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     //dispose the controllers
     _emailController.dispose();
     _passwordController.dispose();
-    _nicController.dispose();
+    _phonenoController.dispose();
     _userNameController.dispose();
-    _mobilenumController.dispose();
   }
 
   @override
@@ -136,13 +132,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 isPassword: false,
                 inputkeyboardType: TextInputType.name,
               ),
-              //text feild for nic
+              //text feild for phoneno
               const SizedBox(
                 height: 20,
               ),
               TextFeildInput(
-                hintText: 'Enter NIC',
-                controller: _nicController,
+                hintText: 'Enter phoneno',
+                controller: _phonenoController,
                 isPassword: false,
                 inputkeyboardType: TextInputType.text,
               ),
@@ -150,15 +146,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               const SizedBox(
                 height: 20,
               ),
-              TextFeildInput(
-                hintText: 'Enter Mobile Number',
-                controller: _mobilenumController,
-                isPassword: false,
-                inputkeyboardType: TextInputType.visiblePassword,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
+
               //button for login
               YellowButton(
                 text: 'Register',

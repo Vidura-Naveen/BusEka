@@ -1,33 +1,43 @@
+// ignore_for_file: dead_code
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../../models/user.dart' as user_model;
 
 class AuthMethodes {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<user_model.User> getCurrentUser() async {
-    User? currentUser = _auth.currentUser; // Change the type to User?
+  // //get the current user details
+  Future<user_model.User?> getCurrentUser() async {
+    try {
+      User? currentUser = _auth.currentUser;
 
-    if (currentUser != null) {
-      DocumentSnapshot snapshot =
-          await _firestore.collection('users').doc(currentUser.uid).get();
+      if (currentUser != null) {
+        DocumentSnapshot snapshot =
+            await _firestore.collection('users').doc(currentUser.uid).get();
 
-      return user_model.User.fromJSON(snapshot.data() as Map<String, dynamic>);
-    } else {
-      // Handle the case where currentUser is null, perhaps by returning a default user or throwing an error.
-      throw Exception("Current user is null");
+        return user_model.User.fromJSON(
+            snapshot.data() as Map<String, dynamic>);
+      } else {
+        // Return null if no user is signed in
+        return null;
+      }
+    } catch (e) {
+      print("Error getting current user: $e");
+      return null;
     }
   }
 
   //register new user
-  Future<String> registerWithEmailAndPassword(
-      {required String email,
-      required String password,
-      required String userName,
-      required String nic,
-      required String mobilenum,
-      String? usercredential}) async {
+  Future<String> registerWithEmailAndPassword({
+    required String email,
+    required String password,
+    required String userName,
+    required String phoneno,
+    String? usercredential,
+  }) async {
     String res = "An error occured";
 
     try {
@@ -35,8 +45,7 @@ class AuthMethodes {
       if (userName.isNotEmpty &&
           password.isNotEmpty &&
           userName.isNotEmpty &&
-          mobilenum.isNotEmpty &&
-          nic.isNotEmpty) {
+          phoneno.isNotEmpty) {
         //create a new user with email and password
         final UserCredential userCredential = await _auth
             .createUserWithEmailAndPassword(email: email, password: password);
@@ -46,10 +55,9 @@ class AuthMethodes {
           uid: userCredential.user!.uid,
           email: email,
           userName: userName,
-          nic: nic,
-          loyaltycount: [0],
+          phoneno: phoneno,
+          loyaltycount: 0,
           usercredential: "passenger",
-          mobilenum: mobilenum,
         );
 
         //if the user is created store the user data in the firestore
@@ -128,9 +136,4 @@ class AuthMethodes {
       // Handle the sign-out error if needed
     }
   }
-
-  // Get the current user
-  // User? getCurrentUser() {
-  //   return _auth.currentUser;
-  // }
 }

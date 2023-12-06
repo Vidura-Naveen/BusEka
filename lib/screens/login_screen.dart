@@ -1,12 +1,13 @@
+import 'package:flutter/material.dart';
 import 'package:bus_eka/screens/home.dart';
-import 'package:bus_eka/screens/passenger/sharelocationorbook.dart';
+// import 'package:bus_eka/screens/home/home.dart';
 import 'package:bus_eka/screens/register_screen.dart';
+import 'package:bus_eka/screens/passenger/sharelocationorbook.dart';
+// import 'package:bus_eka/screens/track_anonymous/map.dart';
 import 'package:bus_eka/services/auth_logic.dart';
 import 'package:bus_eka/utils/util_functions.dart';
-import 'package:bus_eka/widgets/text_feild.dart';
 import 'package:bus_eka/widgets/yellowbutton.dart';
-import 'package:flutter/material.dart';
-
+import 'package:bus_eka/widgets/text_feild.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -32,9 +33,12 @@ class _LoginScreenState extends State<LoginScreen> {
   final AuthMethodes _authMethodes = AuthMethodes();
 
   void loginUser() async {
-    setState(() {
-      isLoaging = true;
-    });
+    if (mounted) {
+      setState(() {
+        isLoaging = true;
+      });
+    }
+
     final String email = _emailController.text.trim();
     final String password = _passwordController.text.trim();
 
@@ -42,6 +46,12 @@ class _LoginScreenState extends State<LoginScreen> {
       email: email,
       password: password,
     );
+
+    if (mounted) {
+      setState(() {
+        isLoaging = false;
+      });
+    }
 
     if (result != 'success') {
       showSnackBar(context, result);
@@ -53,12 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       );
     }
-
-    setState(() {
-      isLoaging = false;
-    });
   }
-
 
   @override
   Widget build(BuildContext context) {
